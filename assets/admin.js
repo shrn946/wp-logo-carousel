@@ -107,7 +107,6 @@
                     <input type="hidden" name="logos[${index}][id]" value="${attachment.id}" />
                     <p><img src="${attachment.url}" class="glc-thumb" style="max-width:120px;max-height:60px;" /></p>
                     <p>Link: <input type="url" name="logos[${index}][link]" style="width:60%" /></p>
-                    <p>Alt text: <input type="text" name="logos[${index}][alt]" style="width:60%" /></p>
                     <p><button type="button" class="button glc-change-logo">Change</button>
                     <button type="button" class="button glc-remove-logo">Remove</button></p>
                 </div>`;
