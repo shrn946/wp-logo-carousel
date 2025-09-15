@@ -2,7 +2,7 @@
 /*
 Plugin Name: GSAP Logo Carousel (Advanced)
 Description: Advanced, responsive, highly-configurable logo carousel using GSAP. Shortcode: [glc_carousel].
-Version: 1.3
+Version: 1.5
 Author: Hassan
 Text Domain: glc
 */
@@ -18,7 +18,6 @@ class GLC_Plugin {
         add_action('admin_enqueue_scripts', array($this, 'admin_assets'));
         add_action('wp_enqueue_scripts', array($this, 'frontend_assets'));
         add_action('wp_ajax_glc_save_settings', array($this, 'ajax_save_settings'));
-        add_action('wp_ajax_glc_import_json', array($this, 'ajax_import_json'));
         add_shortcode('glc_carousel', array($this, 'shortcode'));
     }
 
@@ -83,13 +82,8 @@ class GLC_Plugin {
         <div class="wrap glc-wrap">
             <h1>GSAP Logo Carousel — Settings</h1>
             <form id="glc-form" method="post">
-
-                <!-- ✅ Logos first -->
                 <h2>Logos</h2>
-                <p>
-                    <button type="button" class="button" id="glc-add-logo">Add logo</button>
-                </p>
-
+                <p><button type="button" class="button" id="glc-add-logo">Add logo</button></p>
                 <div id="glc-logos">
                     <?php if (!empty($settings['logos'])): foreach ($settings['logos'] as $index => $logo): ?>
                         <div class="glc-logo-item" data-index="<?php echo $index; ?>">
@@ -104,50 +98,36 @@ class GLC_Plugin {
                     <?php endforeach; endif; ?>
                 </div>
 
-                <!-- ✅ General Settings second -->
                 <h2>General Settings</h2>
                 <table class="form-table">
-                    <tr><th>Speed (px/sec)</th>
-                        <td><input type="number" name="speed" value="<?php echo esc_attr($settings['speed']); ?>" /></td></tr>
-                    <tr><th>Direction</th>
-                        <td>
-                            <select name="direction">
-                                <option value="left" <?php selected($settings['direction'],'left'); ?>>Left</option>
-                                <option value="right" <?php selected($settings['direction'],'right'); ?>>Right</option>
-                            </select>
-                        </td></tr>
-                    <tr><th>Gap (px)</th>
-                        <td><input type="number" name="gap" value="<?php echo esc_attr($settings['gap']); ?>" /></td></tr>
-                    <tr><th>Logo Width (px)</th>
-                        <td><input type="number" name="logo_width" value="<?php echo esc_attr($settings['logo_width']); ?>" /></td></tr>
-                    <tr><th>Logo Height (px)</th>
-                        <td><input type="number" name="logo_height" value="<?php echo esc_attr($settings['logo_height']); ?>" /></td></tr>
-                    <tr><th>Hover Effect</th>
-                        <td>
-                            <select name="hover_effect">
-                                <option value="none" <?php selected($settings['hover_effect'],'none'); ?>>None</option>
-                                <option value="grayscale" <?php selected($settings['hover_effect'],'grayscale'); ?>>Grayscale</option>
-                                <option value="scale" <?php selected($settings['hover_effect'],'scale'); ?>>Zoom In</option>
-                                <option value="opacity" <?php selected($settings['hover_effect'],'opacity'); ?>>Fade</option>
-                            </select>
-                        </td></tr>
-                    <tr><th>Autoplay</th>
-                        <td><input type="checkbox" name="autoplay" value="1" <?php checked($settings['autoplay'], true); ?> /></td></tr>
-                    <tr><th>Pause on hover</th>
-                        <td><input type="checkbox" name="pause_on_hover" value="1" <?php checked($settings['pause_on_hover'], true); ?> /></td></tr>
-                    <tr><th>Loop</th>
-                        <td><input type="checkbox" name="loop" value="1" <?php checked($settings['loop'], true); ?> /></td></tr>
-                    <tr><th>Lazyload images</th>
-                        <td><input type="checkbox" name="lazyload" value="1" <?php checked($settings['lazyload'], true); ?> /></td></tr>
+                    <tr><th>Speed (px/sec)</th><td><input type="number" name="speed" value="<?php echo esc_attr($settings['speed']); ?>" /></td></tr>
+                    <tr><th>Direction</th><td>
+                        <select name="direction">
+                            <option value="left" <?php selected($settings['direction'],'left'); ?>>Left</option>
+                            <option value="right" <?php selected($settings['direction'],'right'); ?>>Right</option>
+                        </select>
+                    </td></tr>
+                    <tr><th>Gap (px)</th><td><input type="number" name="gap" value="<?php echo esc_attr($settings['gap']); ?>" /></td></tr>
+                    <?php /*?><tr><th>Logo Width (px)</th><td><input type="number" name="logo_width" value="<?php echo esc_attr($settings['logo_width']); ?>" /></td></tr><?php */?>
+                    <tr><th>Logo Height (px)</th><td><input type="number" name="logo_height" value="<?php echo esc_attr($settings['logo_height']); ?>" /></td></tr>
+                    <tr><th>Hover Effect</th><td>
+                        <select name="hover_effect">
+                            <option value="none" <?php selected($settings['hover_effect'],'none'); ?>>None</option>
+                            <option value="grayscale" <?php selected($settings['hover_effect'],'grayscale'); ?>>Grayscale</option>
+                            <option value="scale" <?php selected($settings['hover_effect'],'scale'); ?>>Zoom In</option>
+                            <option value="opacity" <?php selected($settings['hover_effect'],'opacity'); ?>>Fade</option>
+                        </select>
+                    </td></tr>
+                    <tr><th>Autoplay</th><td><input type="checkbox" name="autoplay" value="1" <?php checked($settings['autoplay'], true); ?> /></td></tr>
+                    <tr><th>Pause on hover</th><td><input type="checkbox" name="pause_on_hover" value="1" <?php checked($settings['pause_on_hover'], true); ?> /></td></tr>
+                <?php /*?>    <tr><th>Loop</th><td><input type="checkbox" name="loop" value="1" <?php checked($settings['loop'], true); ?> /></td></tr><?php */?>
+                    <tr><th>Lazyload images</th><td><input type="checkbox" name="lazyload" value="1" <?php checked($settings['lazyload'], true); ?> /></td></tr>
                 </table>
 
-                <p class="submit">
-                    <button id="glc-save" class="button button-primary">Save settings</button>
-                </p>
+                <p class="submit"><button id="glc-save" class="button button-primary">Save settings</button></p>
             </form>
 
-            <h2>Shortcode</h2>
-            <p>Use <code>[glc_carousel]</code></p>
+            <h2>Shortcode</h2><p>Use <code>[glc_carousel]</code></p>
         </div>
         <?php
     }
@@ -160,7 +140,7 @@ class GLC_Plugin {
         $body = $_POST;
 
         $opts['speed'] = (int)($body['speed'] ?? $opts['speed']);
-        $opts['direction'] = in_array($body['direction'], array('left','right')) ? $body['direction'] : $opts['direction'];
+        $opts['direction'] = in_array($body['direction'], ['left','right']) ? $body['direction'] : $opts['direction'];
         $opts['gap'] = (int)($body['gap'] ?? $opts['gap']);
         $opts['logo_width'] = (int)($body['logo_width'] ?? $opts['logo_width']);
         $opts['logo_height'] = (int)($body['logo_height'] ?? $opts['logo_height']);
@@ -189,12 +169,9 @@ class GLC_Plugin {
         wp_send_json_success($opts);
     }
 
-    public function ajax_import_json() {}
-
     public function shortcode($atts) {
-		  if (is_admin()) {
-        return ''; // or return '<p>Preview disabled in admin.</p>';
-    }
+        if (is_admin()) return '';
+
         $settings = get_option(self::OPTION_KEY);
         $atts = shortcode_atts(array(
             'speed' => $settings['speed'],
@@ -210,20 +187,13 @@ class GLC_Plugin {
              data-settings='<?php echo esc_attr(json_encode(array_merge($settings, $atts))); ?>'>
             <div class="glc-track">
                 <?php foreach ($settings['logos'] as $logo): 
-                    $alt = '';
-                    if (!empty($logo['id'])) {
-                        $alt = get_the_title($logo['id']); // Use media title
-                    }
-                    if (!$alt) {
-                        $alt = basename($logo['url']); // fallback to filename
-                    }
+                    $alt = !empty($logo['id']) ? get_the_title($logo['id']) : basename($logo['url']);
                 ?>
                     <div class="glc-item" style="margin-right:<?php echo (int)$settings['gap']; ?>px;">
                         <?php if (!empty($logo['link'])): ?><a href="<?php echo esc_url($logo['link']); ?>" target="_blank"><?php endif; ?>
                         <img src="<?php echo esc_attr($logo['url']); ?>"
                              alt="<?php echo esc_attr($alt); ?>"
-                             width="<?php echo (int)$settings['logo_width']; ?>"
-                             height="<?php echo (int)$settings['logo_height']; ?>"
+                             style="height:<?php echo (int)$settings['logo_height']; ?>px; width:auto; object-fit:contain;"
                              loading="<?php echo $settings['lazyload'] ? 'lazy' : 'eager'; ?>" />
                         <?php if (!empty($logo['link'])): ?></a><?php endif; ?>
                     </div>
@@ -234,4 +204,5 @@ class GLC_Plugin {
         return ob_get_clean();
     }
 }
+
 new GLC_Plugin();
