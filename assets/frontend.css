@@ -1,0 +1,51 @@
+/* Basic layout (important) */
+.glc-carousel {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.glc-track {
+    display: flex;
+    align-items: center;
+    will-change: transform;
+}
+
+.glc-item {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* images */
+.glc-item img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-backface-visibility: hidden;
+}
+
+/* hover visual effects */
+.hover-grayscale .glc-item img:hover { 
+    filter: grayscale(100%); 
+}
+
+.hover-scale .glc-item img:hover { 
+    transform: scale(1.1); /* slightly stronger zoom */
+}
+
+.hover-opacity .glc-item img:hover { 
+    opacity: 0.7; /* smoother fade */
+}
+
+/* none = no visual transforms on hover */
+.hover-none .glc-item img:hover { 
+    transform: none; 
+    filter: none; 
+    opacity: 1; 
+}
