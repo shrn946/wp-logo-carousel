@@ -108,7 +108,6 @@ class GLC_Plugin {
                         </select>
                     </td></tr>
                     <tr><th>Gap (px)</th><td><input type="number" name="gap" value="<?php echo esc_attr($settings['gap']); ?>" /></td></tr>
-                    <?php /*?><tr><th>Logo Width (px)</th><td><input type="number" name="logo_width" value="<?php echo esc_attr($settings['logo_width']); ?>" /></td></tr><?php */?>
                     <tr><th>Logo Height (px)</th><td><input type="number" name="logo_height" value="<?php echo esc_attr($settings['logo_height']); ?>" /></td></tr>
                     <tr><th>Hover Effect</th><td>
                         <select name="hover_effect">
@@ -120,7 +119,6 @@ class GLC_Plugin {
                     </td></tr>
                     <tr><th>Autoplay</th><td><input type="checkbox" name="autoplay" value="1" <?php checked($settings['autoplay'], true); ?> /></td></tr>
                     <tr><th>Pause on hover</th><td><input type="checkbox" name="pause_on_hover" value="1" <?php checked($settings['pause_on_hover'], true); ?> /></td></tr>
-                <?php /*?>    <tr><th>Loop</th><td><input type="checkbox" name="loop" value="1" <?php checked($settings['loop'], true); ?> /></td></tr><?php */?>
                     <tr><th>Lazyload images</th><td><input type="checkbox" name="lazyload" value="1" <?php checked($settings['lazyload'], true); ?> /></td></tr>
                 </table>
 
@@ -186,13 +184,11 @@ class GLC_Plugin {
         <div class="glc-carousel <?php echo esc_attr($atts['class']); ?> hover-<?php echo esc_attr($settings['hover_effect']); ?>"
              data-settings='<?php echo esc_attr(json_encode(array_merge($settings, $atts))); ?>'>
             <div class="glc-track">
-                <?php foreach ($settings['logos'] as $logo): 
-                    $alt = !empty($logo['id']) ? get_the_title($logo['id']) : basename($logo['url']);
-                ?>
+                <?php foreach ($settings['logos'] as $logo): ?>
                     <div class="glc-item" style="margin-right:<?php echo (int)$settings['gap']; ?>px;">
                         <?php if (!empty($logo['link'])): ?><a href="<?php echo esc_url($logo['link']); ?>" target="_blank"><?php endif; ?>
                         <img src="<?php echo esc_attr($logo['url']); ?>"
-                             alt="<?php echo esc_attr($alt); ?>"
+                             alt=""
                              style="height:<?php echo (int)$settings['logo_height']; ?>px; width:auto; object-fit:contain;"
                              loading="<?php echo $settings['lazyload'] ? 'lazy' : 'eager'; ?>" />
                         <?php if (!empty($logo['link'])): ?></a><?php endif; ?>
